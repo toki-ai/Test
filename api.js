@@ -36,17 +36,11 @@ let lastId = 3;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/posts", (req, res)=> {
+app.get("/all", (req, res)=> {
   res.json(posts);
 });
 
-app.get("/posts/:id", (req, res)=> {
-  const paseID = parseInt(req.params.id); 
-  const thisPost = posts.find((post) => post.id === id); 
-  res.json(thisPost);
-}); 
-
-app.post("/posts", (req, res) => {
+app.post("/post", (req, res) => {
   const today = new Date(); 
   const newPost = {
     id: posts.length + 1,
@@ -59,7 +53,7 @@ app.post("/posts", (req, res) => {
   res.json(newPost);
 })
 
-app.path("/posts/:id", (req, res) => {
+app.patch("/edit/:id", (req, res) => {
   const id = parseInt(req.params.id);
   const thisPost = posts.find((post) => post.id === id);
   const today = new Date(); 
@@ -75,7 +69,16 @@ app.path("/posts/:id", (req, res) => {
   res.json(replacementPost);
 });
 
-app.delete("");
+app.delete("/posts/:id", (req, res) => {
+  const id = parseInt(req.params.id); 
+  const searchIndex = posts.findIndex ((post) => post.id === id); 
+  if (searchIndex > -1){
+    posts.splice(searchIndex, 1); 
+    res.sendStatus(200);
+  }else{
+    res.status(400);
+  }
+});
 
 app.listen(port, () => {
   console.log(`API is running at http://localhost:${port}`);
