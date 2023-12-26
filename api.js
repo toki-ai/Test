@@ -40,6 +40,12 @@ app.get("/all", (req, res)=> {
   res.json(posts);
 });
 
+app.get("/edit/:id", (req, res) => {
+  const id = parseInt(req.params.id); 
+  const thisPost = posts.find((post) => post.id === id); 
+  res.json(thisPost);
+});
+
 app.post("/post", (req, res) => {
   const today = new Date(); 
   const newPost = {
